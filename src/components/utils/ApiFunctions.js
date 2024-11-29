@@ -1,9 +1,8 @@
 import axios from "axios"
-import https from "https";
 
 export const api = axios.create({
-    baseURL: "https://ec2-3-145-11-214.us-east-2.compute.amazonaws.com:8080",
-    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+    baseURL: "https://ec2-3-145-11-214.us-east-2.compute.amazonaws.com:8080"
+    
 })
 
 export const getHeader = () => {
