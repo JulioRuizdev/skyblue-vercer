@@ -1,8 +1,7 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL: "https://ec2-3-145-11-214.us-east-2.compute.amazonaws.com:8080"
-    
+    baseURL: "https://skybluehotelsoa.duckdns.org"  // Updated baseURL to use the new domain
 })
 
 export const getHeader = () => {
@@ -38,7 +37,6 @@ export async function addRoom(photo, roomType, roomPrice) {
         return false;
     } catch (error) {
         if (error.response) {
-            // Error de respuesta del servidor
             if (error.response.status === 401) {
                 throw new Error("No autorizado. Por favor inicie sesión nuevamente");
             }
@@ -57,6 +55,7 @@ export async function getRoomTypes() {
         throw new Error("Error fetching room types")
     }
 }
+
 /* Esta función obtiene todas las habitaciones de la base de datos */
 export async function getAllRooms() {
     try {
@@ -78,11 +77,11 @@ export async function deleteRoom(roomId) {
         throw new Error(`Error deleting room ${error.message}`)
     }
 }
+
 /* Esta función actualiza una habitación */
 export async function updateRoom(roomId, roomData) {
     try {
         const headers = getHeader();
-        // Eliminar Content-Type para permitir que el navegador establezca el boundary correcto para FormData
         delete headers["Content-Type"];
 
         const response = await api.put(`/rooms/update/${roomId}`, roomData, {
@@ -160,8 +159,7 @@ export async function cancelBooking(bookingId) {
 /* Esta función obtiene todas las habitaciones disponibles de la base de datos con una fecha dada y un tipo de habitación */
 export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
     const result = await api.get(
-        `rooms/available-rooms?checkInDate=${checkInDate}
-        &checkOutDate=${checkOutDate}&roomType=${roomType}`
+        `rooms/available-rooms?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&roomType=${roomType}`
     )
     return result
 }
@@ -172,7 +170,7 @@ export async function registerUser(registration) {
         const response = await api.post("/auth/register-user", registration)
         return response.data
     } catch (error) {
-        if (error.reeponse && error.response.data) {
+        if (error.response && error.response.data) {
             throw new Error(error.response.data)
         } else {
             throw new Error(`User registration error : ${error.message}`)
